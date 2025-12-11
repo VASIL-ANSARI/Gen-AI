@@ -1,4 +1,0 @@
-crawler_logs/crawler.log
-scraped_pages/*.txt
-scraped_pages/*.json
-company_docs/*
