@@ -1,0 +1,96 @@
+URL: https://www.elevanceskills.com/projects/learn-to-build-real-time-website-like-make-my-trip-spring-boot-java
+
+Resources
+Our Credibility
+Projects
+Intern Portal
+Login
+Sign Up
+Web Development
+Learn to Build Real Time Website Like Make My Trip - Spring Boot Java
+
+This course is designed to help you build a full-stack MakeMyTrip clone, incorporating Spring Boot for the backend, MongoDB as the database, and Next.js for the frontend. Through hands-on experience, you will develop a dynamic travel booking platform where users can search, filter, and book hotels and flights. Additionally, an admin panel will be created to manage listings, bookings, and users efficintly.
+
+24 Lessons
+Internship Opportunity
+Certificates
+Start Learning
+Project Overview
+
+The course covers the fundamentals of backend development using Spring Boot, including API creation, authentication, and data management with MongoDB. On the frontend, you will build a responsive and interactive UI using Next.js with modern design principles. The integration of the frontend and backend will be achieved through RESTful APIs, ensuring smooth data exchange.
+
+
+
+
+Furthermore, you will explore state management techniques, payment simulation, and real-time availability tracking for bookings. The course also introduces security best practices, such as user authentication and role-based authorization for both users and admins.
+
+Project Content
+Web Development Unleashed
+Creating Make My Trip Website
+Learning Objectives
+Develop a Full-Stack Application: Gain hands-on experience in building a scalable and functional travel booking system from scratch using Spring Boot, MongoDB, and Next.js.
+Master Backend Development: Learn how to design RESTful APIs, manage data with MongoDB, and implement secure authentication and authorization.
+Build an Interactive Frontend: Use Next.js to create a modern, responsive, and dynamic UI with real-time updates and smooth navigation.
+Implement Hotel & Flight Booking Features: Allow users to search, filter, and book hotels and flights, ensuring a seamless booking experience.
+Develop an Admin Panel: Create a powerful admin dashboard to manage flights, hotels, bookings, and users efficiently.
+Optimize for Performance: Apply best practices in database management, API handling, and frontend optimization to enhance the application's speed and scalability.
+Deploy the Application: Learn how to deploy the full-stack project on a cloud platform for real-world accessibility.
+Features and Benefits
+User Authentication & Role-Based Access – Secure login/signup system for users and admins.
+Hotel & Flight Booking – Users can search, filter, and book based on availability.
+Admin Dashboard – Manage hotels, flights, bookings, and users efficiently.
+Dynamic Availability Management – Update seat and room availability in real-time.
+Modern UI/UX – Responsive design with smooth animations for a professional feel.
+Fast & Scalable Backend – Spring Boot and MongoDB ensure high performance.
+RESTful API Communication – Efficient data exchange between frontend and backend.
+Cloud Deployment – Learn how to deploy and host your project online.
+Earn Multiple Certificates
+
+Showcase your achievements with industry-recognized certificates that validate your expertise.
+
+C
+
+₹997
+
+₹1499
+
+33% OFF
+Enroll Now
+Includes
+24 Lessons
+1–6 months Internship Opportunity
+₹3,000 Stipend on Successful Completion
+Multiple Certificates
+
+© 2025 ElevanceSkills. All Rights Reserved.
+
+Empowering students with real-world skills and experience.
+
+Formerly known as NullClass — now reimagined as ElevanceSkills, your next step in modern education.
+
+Contact Us
++91 91347 72858
+WhatsApp
+info@elevanceskills.com
+
+Our team typically responds within 24 hours.
+
+Quick Links
+Home
+Partner With Us
+About Us
+FAQ
+Contact
+Privacy Policy
+Terms of Use
+LinkedIn
+Youtube
+Instagram
+
+Built from the legacy of NullClass — now evolved into ElevanceSkills, redefining industrial training for the next generation.
+
+Innovating, empowering, and transforming the way students learn.
+
+Back to Top
+
+/projects/learn-to-build-real-time-website-like-make-my-trip-spring-boot-java
