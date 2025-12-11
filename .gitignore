@@ -1,0 +1,4 @@
+/task_1/crawler_logs/crawler.log
+/task_1/scraped_pages/*.txt
+/task_1/scraped_pages/*.json
+/task_1/company_docs/*
