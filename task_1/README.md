@@ -31,8 +31,7 @@ pip install -r requirements.txt
 
 ## 🛠 Update API key and Dataset file path
 ```
-In config.ini, update the dataset_file location.
-In .env file, update the GOOGLE_API_KEY.
+In .env file, update the GOOGLE_API_KEY and dataset_file location.
 ```
 
 ## ▶️ How to Run

@@ -6,11 +6,13 @@ from langchain_community.vectorstores import FAISS
 import os
 import configparser
 
-config = configparser.ConfigParser()
-config.read("config.ini")
+from dotenv import load_dotenv
+import os
 
-# Access values
-csv_path = config["PATHS"]["dataset_file"]
+load_dotenv()
+csv_path = os.getenv("dataset_file")
+
+print(csv_path)
 
 def deduplicate_documents(docs, ingested_hashes):
     new_docs = []
@@ -32,14 +34,26 @@ def ingest_all_sources(vectordb_path, embeddings,
     - site_urls: list of seed site urls to crawl (e.g. ["https://www.elevanceskills.com"])
     - pdf_folder, csv_path, api_urls: other sources
     """
-    if site_urls is None:
-        site_urls = ["https://www.elevanceskills.com/"]
 
     ingested_hashes = load_hashes()
 
+    
     all_docs = []
+    
+    # 1) CSV FAQ
+    try:
+        csv_docs = load_csv(csv_path)
+        all_docs.extend(csv_docs)
+        print(f'Added CSV data : {len(all_docs)}')
+    except Exception as e:
+        print("Exception occurred : ", e)
+        pass
 
-    # 1) Crawl & scrape site(s)
+
+    if site_urls is None:
+        site_urls = ["https://www.elevanceskills.com/"]
+
+    # 2) Crawl & scrape site(s)
     for base in site_urls:
         try:
             res = discover_site(base, max_pages=150, delay=0.8)
@@ -53,13 +67,6 @@ def ingest_all_sources(vectordb_path, embeddings,
                     all_docs.append(Document(page_content=content, metadata={"source": url}))
         except Exception:
             pass
-
-    # 2) CSV FAQ
-    try:
-        csv_docs = load_csv(csv_path)
-        all_docs.extend(csv_docs)
-    except Exception:
-        pass
 
     # 3) PDFs local folder
     try:

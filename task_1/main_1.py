@@ -49,17 +49,16 @@ else:
     vectordb = FAISS.from_documents(documents=placeholder, embedding=embeddings)
     vectordb.save_local(VECTORDB_PATH)
 
-# Start scheduler (background)
-start_scheduler(VECTORDB_PATH, embeddings, site_urls=["https://www.elevanceskills.com/"])
-
 # Manual ingestion button
 if st.button("🔄 Run ingestion now"):
-    ingest_all_sources(VECTORDB_PATH, embeddings, site_urls=["https://www.elevanceskills.com/"])
-    st.success("Ingestion finished")
+    # Start scheduler (background)
+    start_scheduler(VECTORDB_PATH, embeddings, site_urls=["https://www.elevanceskills.com/"])
+    # ingest_all_sources(VECTORDB_PATH, embeddings, site_urls=["https://www.elevanceskills.com/"])
+    st.success("Knowledge Database ingestion started")
 
 st.title("ElevanceSkills — Dynamic RAG Chatbot")
 
-def get_feedback_docs(query, top_k=5):
+def get_feedback_docs(query, top_k=10):
     # simple feedback retrieval: load feedback file and return all entries
     # optional: build a small feedback vectorstore separately to do similarity search
     feedback_docs = load_user_feedback("feedback.txt")
@@ -69,7 +68,7 @@ def get_feedback_docs(query, top_k=5):
 def combined_retrieval(query):
     # Primary retrieval from main vectordb
     try:
-        retriever = vectordb.as_retriever(score_threshold=0.7)
+        retriever = vectordb.as_retriever(score_threshold=0.8)
         vector_docs = retriever.invoke(query)
     except Exception:
         vector_docs = []
@@ -86,29 +85,53 @@ def combined_retrieval(query):
 
     # Return as text context: join top N documents' content
     texts = [d.page_content for d in combined]
-    return "\n\n".join(texts[:8])  # limit to reasonable size
+    return "\n\n".join(texts[:12])  # limit to reasonable size
 
+
+def feedback_wrapper(query):
+    # ALWAYS return feedback docs (text merged)
+    docs = get_feedback_docs(query)
+    if not docs:
+        return "No relevant user feedback."
+    return "\n\n".join([d.page_content for d in docs])
+    
 prompt_template = """
 You are an assistant for ElevanceSkills.
 
-Use only the CONTEXT provided to answer. If the answer is not present in the context, say:
-"I don't know based on current data."
+You have multiple knowledge sources. Use them in this strict priority order:
 
-Always mention if you used user feedback or fallback sources.
+1. PRIMARY CONTEXT (highest priority)
+   - These are verified source of information.
+   - Company documents, scraped website pages, PDFs, APIs, and other ingested data.
 
-CONTEXT:
+2. USER FEEDBACK 
+   - These are corrections provided by users.
+   - If any feedback matches or relates to the question, try to verify it from primary context and then provide answer.
+
+3. If the information is not present in either user feedback or primary context, say:
+   "I don't know based on current data."
+
+RULES:
+- NEVER invent information.
+- NEVER answer using outside knowledge.
+
+USER FEEDBACK CONTEXT:
+{feedback_context}
+
+PRIMARY CONTEXT:
 {context}
 
 QUESTION:
 {question}
 """
 
-PROMPT = PromptTemplate(input_variables=["context", "question"], template=prompt_template)
+PROMPT = PromptTemplate(input_variables=["context", "feedback_context", "question"], template=prompt_template)
 
 rag = (
     RunnableMap({
         "question": RunnablePassthrough(),
-        "context": RunnableLambda(lambda q: combined_retrieval(q))
+        "context": RunnableLambda(lambda q: combined_retrieval(q)),
+        "feedback_context": RunnableLambda(lambda q: feedback_wrapper(q))
     })
     | PROMPT
     | llm
@@ -127,8 +150,8 @@ if st.button("Ask") and query:
     st.session_state["last_answer"] = answer
     st.session_state["show_feedback"] = True
 
-    st.subheader("Answer")
-    st.write(answer)
+    # st.subheader("Answer")
+    # st.write(answer)
 
 # Show answer & feedback if available
 if st.session_state.get("show_feedback", False):
@@ -139,9 +162,9 @@ if st.session_state.get("show_feedback", False):
     st.write("---")
     st.markdown("### Feedback (help improve the bot):")
     rating = st.radio("Was this answer helpful?", ("Yes", "No"), key="rating")
-    correction = st.text_area("Correction / additional info (optional)", key="correction")
+    correction = st.text_area("Correction / additional info", key="correction")
 
-    if st.button("Submit feedback"):
+    if st.button("Submit feedback") and correction:
         with open("feedback.txt", "a", encoding="utf-8") as f:
             f.write(
                 f"QUESTION: {st.session_state['last_query']}\n"

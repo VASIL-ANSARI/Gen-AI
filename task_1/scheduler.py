@@ -1,12 +1,14 @@
 import threading, time
 from ingestion import ingest_all_sources
-import configparser
 
-config = configparser.ConfigParser()
-config.read("config.ini")
+from dotenv import load_dotenv
+import os
 
-# Access values
-csv_path = config["PATHS"]["dataset_file"]
+load_dotenv()
+csv_path = os.getenv("dataset_file")
+
+print(csv_path)
+
 
 def start_scheduler(vectordb_path, embeddings, site_urls=None, pdf_folder="company_docs", csv_path=csv_path, api_urls=None, feedback_file="feedback.txt"):
     def run():
