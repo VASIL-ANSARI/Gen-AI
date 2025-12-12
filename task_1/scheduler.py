@@ -1,7 +1,14 @@
 import threading, time
 from ingestion import ingest_all_sources
+import configparser
 
-def start_scheduler(vectordb_path, embeddings, site_urls=None, pdf_folder="company_docs", csv_path="dataset/dataset.csv", api_urls=None, feedback_file="feedback.txt"):
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+# Access values
+csv_path = config["PATHS"]["dataset_file"]
+
+def start_scheduler(vectordb_path, embeddings, site_urls=None, pdf_folder="company_docs", csv_path=csv_path, api_urls=None, feedback_file="feedback.txt"):
     def run():
         while True:
             try:

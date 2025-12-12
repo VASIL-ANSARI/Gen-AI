@@ -4,6 +4,13 @@ from scrapers import load_csv, load_pdfs, load_api, load_user_feedback
 from langchain_core.documents import Document
 from langchain_community.vectorstores import FAISS
 import os
+import configparser
+
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+# Access values
+csv_path = config["PATHS"]["dataset_file"]
 
 def deduplicate_documents(docs, ingested_hashes):
     new_docs = []
@@ -18,7 +25,7 @@ def deduplicate_documents(docs, ingested_hashes):
 
 def ingest_all_sources(vectordb_path, embeddings,
                        site_urls=None, pdf_folder="company_docs",
-                       csv_path="/Users/vasilansari/Desktop/Gen AI Project/customer-chatbot/dataset/dataset.csv", api_urls=None, feedback_file="feedback.txt"):
+                       csv_path=csv_path, api_urls=None, feedback_file="feedback.txt"):
     """
     - vectordb_path: folder path for local FAISS
     - embeddings: an embeddings object (HuggingFaceInstructEmbeddings)

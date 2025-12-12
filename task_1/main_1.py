@@ -27,10 +27,18 @@ genai.configure(api_key=API_KEY)
 st.set_page_config(page_title="ElevanceSkills RAG Chatbot")
 
 # LLM and embeddings
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.2)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0.2)
 embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large")
 
 VECTORDB_PATH = "vector_db_store"
+
+#create feedback file to store user feedback
+if not os.path.exists("feedback.txt"):
+    with open("feedback.txt", "w") as f:
+        f.write("")  # empty file
+    print("File created.")
+else:
+    print("Feeback File already exists.")
 
 # Initialize / load vector DB
 if os.path.exists(VECTORDB_PATH):
@@ -113,51 +121,32 @@ query = st.text_input("Ask about ElevanceSkills:")
 if st.button("Ask") and query:
     with st.spinner("Answering..."):
         answer = rag.invoke(query)
+
+    # Store state
+    st.session_state["last_query"] = query
+    st.session_state["last_answer"] = answer
+    st.session_state["show_feedback"] = True
+
     st.subheader("Answer")
     st.write(answer)
+
+# Show answer & feedback if available
+if st.session_state.get("show_feedback", False):
+    st.subheader("Answer")
+    st.write(st.session_state["last_answer"])
 
     # Store feedback init entry and provide feedback id
     st.write("---")
     st.markdown("### Feedback (help improve the bot):")
-    rating = st.radio("Was this answer helpful?", ("", "Yes", "No"))
-    correction = st.text_area("Correction / additional info (optional)")
+    rating = st.radio("Was this answer helpful?", ("Yes", "No"), key="rating")
+    correction = st.text_area("Correction / additional info (optional)", key="correction")
 
     if st.button("Submit feedback"):
         with open("feedback.txt", "a", encoding="utf-8") as f:
-            f.write(f"QUESTION: {query}\nANSWER: {answer}\nRATING: {rating}\nCORRECTION: {correction}\n---\n")
+            f.write(
+                f"QUESTION: {st.session_state['last_query']}\n"
+                f"ANSWER: {st.session_state['last_answer']}\n"
+                f"RATING: {st.session_state['rating']}\n"
+                f"CORRECTION: {st.session_state['correction']}\n---\n"
+            )
         st.success("Thanks — feedback recorded.")
-
-
-
-
-
-# import streamlit as st
-# from langchain_helper_updated import get_qa_chain, create_vector_db
-# # import threading
-# # import time
-# # import hashlib
-
-# # def scheduler_worker():
-# #     while True:
-# #         fetch_and_ingest_site()
-# #         time.sleep(12 * 60 * 60)  # 12 hours
-
-# # threading.Thread(target=scheduler_worker, daemon=True).start()
-
-# st.title(" CUSTOMER SERVICE CHATBOT 🤖")
-# btn = st.button("Create Knowledgebase")
-
-# if btn:
-#     create_vector_db()
-
-
-# question = st.text_input("Question: ")
-
-# submit = st.button("Ask the question")
-
-# if submit and question:
-#     rag = get_qa_chain()
-#     response = rag.invoke(question)
-
-#     st.header("Answer")
-#     st.write(response)

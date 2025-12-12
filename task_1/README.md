@@ -29,9 +29,16 @@ Settings stored in config.yaml
 pip install -r requirements.txt
 ```
 
+## 🛠 Update API key and Dataset file path
+```
+In config.ini, update the dataset_file location.
+In .env file, update the GOOGLE_API_KEY.
+```
+
 ## ▶️ How to Run
 ```
-python crawler.py
+streamlit run main_1.py
+_
 ```
 
 ## 📁 Output
@@ -42,3 +49,7 @@ scraped_pages/
 
 ## 🎯 Final Outcome
 A fully working ingestion pipeline ready for RAG systems.
+All the website that are crawled are stored in crawler/crawler.log file.
+All the web scraping details are stored in scraped_pages folder.
+vector_db_store folder contains the embeddings of the knowledge database.
+The scheduler runs every 12 hours to updated the knowledge database.

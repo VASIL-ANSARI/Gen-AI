@@ -59,6 +59,7 @@ def load_user_feedback(feedback_file="feedback.txt"):
     with open(feedback_file, "r", encoding="utf-8") as f:
         for line in f:
             text = line.strip()
+            print(f'File Text: {line}\n\n')
             if text:
                 docs.append(Document(page_content=text, metadata={"source": "user_feedback"}))
     return docs
