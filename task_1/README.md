@@ -31,11 +31,12 @@ pip install -r requirements.txt
 
 ## 🛠 Update API key and Dataset file path
 ```
-In .env file, update the GOOGLE_API_KEY and dataset_file location.
+In task_1/.env file, update the GOOGLE_API_KEY and dataset_file location.
 ```
 
 ## ▶️ How to Run
 ```
+cd task_1
 streamlit run main_1.py
 _
 ```
