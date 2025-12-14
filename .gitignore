@@ -5,3 +5,4 @@
 /task_1/ingested_hashes.json
 venv/
 **/.DS_Store
+/task_3/MedQuAD/*
