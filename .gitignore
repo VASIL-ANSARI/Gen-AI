@@ -3,3 +3,5 @@
 /task_1/scraped_pages/*.json
 /task_1/company_docs/*
 /task_1/ingested_hashes.json
+venv/
+**/.DS_Store
