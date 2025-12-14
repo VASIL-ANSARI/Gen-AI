@@ -63,18 +63,18 @@ def create_vector_store():
         raise
 
 
-def retrieve_context(sentiment):
+def retrieve_context(sentiment, anxiety_flag):
     # embeddings = SentenceTransformer(EMBED_MODEL)
 
     vectordb = FAISS.load_local(vectordb_file_path, instructor_embeddings, allow_dangerous_deserialization=True)
 
     retriever = vectordb.as_retriever(score_threshold=0.8)
 
-    rag = build_rag_chain(retriever, sentiment)
+    rag = build_rag_chain(retriever, sentiment, anxiety_flag)
 
     return rag
 
-def build_rag_chain(retriever, sentiment):
+def build_rag_chain(retriever, sentiment, anxiety_flag):
 
     template = """
     You are a medical information assistant.
@@ -82,8 +82,10 @@ def build_rag_chain(retriever, sentiment):
     User Sentiment: {sentiment}
 
     Instructions:
-    - If sentiment is NEGATIVE:
-    Use a calm, empathetic, reassuring tone.
+    - If sentiment is NEGATIVE or anxiety is detected:
+        - Use empathetic, calming language
+        - Reassure without diagnosing
+        - Encourage consulting a medical professional when appropriate
     - If sentiment is POSITIVE:
     Be supportive and encouraging.
     - If sentiment is NEUTRAL:
@@ -114,7 +116,8 @@ def build_rag_chain(retriever, sentiment):
             "sentiment": RunnableLambda(lambda x: sentiment),
             "context": retriever | RunnableLambda(
                 lambda docs: "\n\n".join(d.page_content for d in docs)
-            )
+            ),
+            "anxiety": RunnableLambda(lambda _: anxiety_flag)
         })
         | prompt
         | llm

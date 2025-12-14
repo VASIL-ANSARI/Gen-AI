@@ -16,13 +16,13 @@ def detect_sentiment(text: str) -> dict:
     """
     result = sentiment_analyzer(text[:512])[0]
 
-    label = result["label"]
     score = round(result["score"], 2)
+    
+    label = result["label"]
 
-    # Map to chatbot-friendly categories
-    if label == "NEGATIVE" and score > 0.8:
+    if label == "NEGATIVE" and score >= 0.60:
         sentiment = "negative"
-    elif label == "POSITIVE" and score > 0.8:
+    elif label == "POSITIVE" and score >= 0.65:
         sentiment = "positive"
     else:
         sentiment = "neutral"

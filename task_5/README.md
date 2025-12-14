@@ -31,12 +31,15 @@ UI: Streamlit
 Dataset: MedQuAD
 
 ## ▶️ How to Run
+
+```bash
 git clone <repo-url>
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 cd task_5
 streamlit run main_5.py
+```
 
 ## 📥 Knowledge Base Creation
 
