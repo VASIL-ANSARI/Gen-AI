@@ -109,7 +109,7 @@ dataset_file=your dataset file lcoation
 ## ▶️ How to Run the Application
 
 ```bash
-streamlit run app.py
+streamlit run main_2.py
 ```
 
 ---
