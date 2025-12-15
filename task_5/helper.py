@@ -23,7 +23,7 @@ print(dataset_path)
 genai.configure(api_key=api_key)
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-3-pro-preview",
+    model="gemini-2.5-flash",
     temperature=0.0,
 )
 
@@ -73,6 +73,24 @@ def retrieve_context(sentiment, anxiety_flag):
     rag = build_rag_chain(retriever, sentiment, anxiety_flag)
 
     return rag
+
+
+def format_chat_history(chat_history, max_turns=5):
+    """
+    Keeps only the most recent turns to avoid token overflow
+    """
+    recent_history = chat_history[-max_turns:]
+
+    formatted = []
+    for turn in recent_history:
+        formatted.append(
+            f"User: {turn['question']}\n"
+            f"Assistant: {turn['answer']}\n"
+            f"(Sentiment: {turn['sentiment']}, "
+            f"Anxiety: {'Yes' if turn['anxiety'] else 'No'})"
+        )
+
+    return "\n\n".join(formatted)
 
 def build_rag_chain(retriever, sentiment, anxiety_flag):
 
