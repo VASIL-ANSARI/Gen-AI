@@ -1,6 +1,8 @@
 ## 🏥 Medical Q&A Chatbot (MedQuAD)
 
-A retrieval-augmented medical question-answering chatbot built using the MedQuAD dataset. The chatbot provides context-grounded medical information, detects user sentiment and medical anxiety, and responds using emotionally appropriate and safe language.
+A retrieval-augmented medical question-answering chatbot built using the MedQuAD dataset.
+
+The chatbot combines retrieval-augmented generation with domain-specific sentiment analysis and confidence visualization to improve emotional awareness, transparency, and response appropriateness in medical conversations.
 
 ⚠️ Disclaimer: This chatbot is for educational purposes only and does not provide medical advice, diagnosis, or treatment.
 
@@ -15,6 +17,9 @@ A retrieval-augmented medical question-answering chatbot built using the MedQuAD
 📊 Sentiment Visualization with confidence score
 
 🛡️ Strict medical safety guardrails
+
+## Sentiment Analyzer Model Evaluation
+We fine-tuned a ClinicalBERT model on medical-domain sentiment data to reduce false negative bias caused by clinical terminology. This significantly improved neutral sentiment detection and emotional sensitivity in healthcare interactions.
 
 ## 🏗️ Tech Stack
 
@@ -57,17 +62,13 @@ Neutral users: Clear, factual, professional answers
 ## 🧪 Sample Questions by Sentiment
 😟 Negative / Anxious
 
-“I’m really scared about this chest pain. Is it serious?”
+“What are the symptoms of leukemia?”
 
-“I’m worried my symptoms might be cancer.”
+“I am really scared about my diagnosis”
 
 😐 Neutral
 
-“What are the symptoms of diabetes?”
-
-“How is asthma diagnosed?”
-
-“What causes high blood pressure?”
+“Can chemotherapy cause fatigue?”
 
 🙂 Positive
 

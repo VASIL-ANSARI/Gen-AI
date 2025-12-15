@@ -23,7 +23,7 @@ print(dataset_path)
 genai.configure(api_key=api_key)
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
+    model="gemini-3-pro-preview",
     temperature=0.0,
 )
 
@@ -80,9 +80,10 @@ def build_rag_chain(retriever, sentiment, anxiety_flag):
     You are a medical information assistant.
 
     User Sentiment: {sentiment}
+    Medical Anxiety Detected: {anxiety}
 
     Instructions:
-    - If sentiment is NEGATIVE or anxiety is detected:
+    - If sentiment is NEGATIVE or anxiety is TRUE:
         - Use empathetic, calming language
         - Reassure without diagnosing
         - Encourage consulting a medical professional when appropriate
@@ -113,11 +114,11 @@ def build_rag_chain(retriever, sentiment, anxiety_flag):
     rag_chain = (
         RunnableMap({
             "question": RunnablePassthrough(),
-            "sentiment": RunnableLambda(lambda x: sentiment),
+            "sentiment": RunnableLambda(lambda _: sentiment),
+            "anxiety": RunnableLambda(lambda _: anxiety_flag),
             "context": retriever | RunnableLambda(
                 lambda docs: "\n\n".join(d.page_content for d in docs)
-            ),
-            "anxiety": RunnableLambda(lambda _: anxiety_flag)
+            )
         })
         | prompt
         | llm
