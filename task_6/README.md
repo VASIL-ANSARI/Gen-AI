@@ -28,6 +28,7 @@ Python · Streamlit · LangChain · FAISS · Google Gemini · Sentence-Transform
 pip install -r requirements.txt
 cd task_6
 streamlit run main_6.py
+```
 
 ---
 
