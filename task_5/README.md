@@ -38,10 +38,6 @@ Dataset: MedQuAD
 ## ▶️ How to Run
 
 ```bash
-git clone <repo-url>
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
 cd task_5
 streamlit run main_5.py
 ```
@@ -61,15 +57,16 @@ Neutral users: Clear, factual, professional answers
 
 ## 🧪 Sample Questions by Sentiment
 😟 Negative / Anxious
-
 “What are the symptoms of leukemia?”
-
 “I am really scared about my diagnosis”
 
 😐 Neutral
-
 “Can chemotherapy cause fatigue?”
 
 🙂 Positive
-
 “Thanks! Can you explain how vaccines work?”
+
+## Recorded Vide
+```
+https://drive.google.com/file/d/1N49cTX4YGBvNrQJegEaQ_lWf84kFCrFL/view?usp=sharing
+```
