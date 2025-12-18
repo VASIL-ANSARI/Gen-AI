@@ -6,3 +6,12 @@
 venv/
 **/.DS_Store
 /task_3/MedQuAD/*
+/task_4/task_4/arxiv-metadata-oai-snapshot.json
+/task_4/arxiv.zip
+venv/
+__pycache__/
+/task_1/__pycache__/
+/task_2/__pycache__/
+/task_3/__pycache__/
+/task_4/__pycache__/
+/task_5/__pycache__/
