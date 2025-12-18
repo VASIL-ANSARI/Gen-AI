@@ -1,5 +1,5 @@
 import streamlit as st
-from helper import get_query_chain
+from helper import get_query_chain, update_conversation_summary
 
 st.set_page_config(page_title="arXiv Expert Chatbot", layout="wide")
 st.title("📚 arXiv Domain Expert Chatbot")
@@ -42,6 +42,9 @@ st.divider()
 # ---------------------------
 st.subheader("💬 Research Conversation")
 
+if "conversation_summary" not in st.session_state:
+    st.session_state.conversation_summary = ""
+
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -49,13 +52,23 @@ query = st.text_input("Ask a research-level question")
 
 if query:
     with st.spinner("Searching arXiv & reasoning..."):
-        chain = get_query_chain(domain_code)
+        chain = get_query_chain(domain_code, st.session_state.chat_history, st.session_state.conversation_summary)
         response = chain.invoke(query)
 
     # rag = get_qa_chain(domain_code, st.session_state.chat_history)
     # response = rag.invoke(query)
 
+    st.session_state.conversation_summary = update_conversation_summary(
+        st.session_state.conversation_summary,
+        query,
+        response
+    )
+
     st.session_state.chat_history.append((query, response))
+
+    MAX_TURNS = 4  # Last 4 conversations
+
+    st.session_state.chat_history = st.session_state.chat_history[-MAX_TURNS:]
 
 # ---------------------------
 # Display History

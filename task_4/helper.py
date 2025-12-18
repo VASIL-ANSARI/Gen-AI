@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 from typing import List, Dict
 
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableLambda
@@ -50,7 +52,7 @@ DOMAIN_CODE_TO_NAME = {
 
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
+    model="gemini-2.5-pro",
     temperature=0.1
 )
 
@@ -211,28 +213,107 @@ def build_llm_context(query: str, top_papers) -> str:
     return "\n\n".join(context_blocks)
 
 # ============================================================
-# 6. End-to-End Query → Context → LLM
+# 6. Re-write the follow-up question
+# ============================================================
+CONDENSE_PROMPT = ChatPromptTemplate.from_template("""
+You are a scientific research assistant.
+
+Given the chat history and a follow-up question,
+rewrite the follow-up question so it can be understood independently.
+
+Chat History:
+{chat_history}
+
+Follow-up Question:
+{question}
+
+Standalone Question:
+""")
+
+def condense_question(llm, chat_history, question):
+    history_text = "\n".join(
+        [f"{role}: {msg}" for role, msg in chat_history]
+    )
+
+    return (
+        CONDENSE_PROMPT
+        | llm
+        | StrOutputParser()
+    ).invoke({
+        "chat_history": history_text,
+        "question": question
+    })
+
+# ============================================================
+# 7. Generate Conversation Summary
+# ============================================================
+SUMMARY_PROMPT = ChatPromptTemplate.from_template("""
+You are maintaining a concise scientific conversation memory.
+Provide a concise summary in 5-8 sentences.
+
+Update the existing summary using the new interaction.
+Preserve only:
+- Main scientific topics
+- Key concepts or models
+- Referenced papers (arXiv IDs)
+- Open questions or focus areas
+
+Existing Summary:
+{summary}
+
+New Interaction:
+User: {user}
+Assistant: {assistant}
+
+Updated Summary:
+""")
+
+def update_conversation_summary(
+    existing_summary: str,
+    user_msg: str,
+    assistant_msg: str
+) -> str:
+    return (
+        SUMMARY_PROMPT
+        | llm
+        | StrOutputParser()
+    ).invoke({
+        "summary": existing_summary or "No prior summary.",
+        "user": user_msg,
+        "assistant": assistant_msg
+    })
+
+# ============================================================
+# 8. End-to-End Query → Context → LLM
 # ============================================================
 
-def answer_query(query: str, domain_code: str) -> str:
+def answer_query(query: str, domain_code: str, chat_history: List[tuple] = None, conversation_summary: str = "") -> str:
 
-    query_terms = query.lower().split()
+    if chat_history:
+        condensed_query = condense_question(llm, chat_history, query)
+    else:
+        condensed_query = query
+
+    if DEBUG:
+        print("[DEBUG] Condensed Query:", condensed_query)
+
+    query_terms = condensed_query.lower().split()
 
     candidates = stream_arxiv_candidates(domain_code, query_terms)
-    bert_ranked = rerank_with_bert(query, candidates)
-    final_ranked = cross_encode_rerank(query, bert_ranked)
+    bert_ranked = rerank_with_bert(condensed_query, candidates)
+    final_ranked = cross_encode_rerank(condensed_query, bert_ranked)
 
     if not final_ranked:
         return "I don't know."
 
-    context = build_llm_context(query, final_ranked)
+    context = build_llm_context(condensed_query, final_ranked)
 
     if DEBUG:
         print("\n### FINAL CONTEXT SENT TO LLM ###\n")
         print(context)
 
     prompt = PromptTemplate(
-        input_variables=["context", "question", "domain"],
+        input_variables=["context", "question", "domain", "summary"],
         template="""
             You are an expert scientific research assistant specializing in **{domain}**,
             with deep expertise in physics, computational mechanics, numerical methods,
@@ -241,7 +322,7 @@ def answer_query(query: str, domain_code: str) -> str:
             INSTRUCTIONS:
             1. Use ONLY the information provided in the Context below.
             2. Every major claim, explanation, or conclusion MUST be followed by a citation in the format: [arXiv:XXXX.XXXXX].
-            3. Citations MUST correspond to references explicitly present in the Context. 
+            3. Citations MUST correspond to references explicitly present in the Context and should be clickable links.
             4. Do NOT invent equations, assumptions, results, DOIs or references.
             5. Treat the domain ("{domain}") as authoritative for terminology,
             assumptions, and methodological standards.
@@ -257,6 +338,9 @@ def answer_query(query: str, domain_code: str) -> str:
             • why the method works and what domain-specific problem it solves
             - Use precise scientific language while explaining complex concepts clearly.
 
+            Conversation Summary:
+            {summary}
+
             Context:
             {context}
 
@@ -270,15 +354,16 @@ def answer_query(query: str, domain_code: str) -> str:
     return chain.invoke({
         "context": context,
         "question": query,
-        "domain": DOMAIN_CODE_TO_NAME.get(domain_code)
+        "domain": DOMAIN_CODE_TO_NAME.get(domain_code),
+        "summary": conversation_summary
     })
 
 # ============================================================
 # Chain Wrapper (Streamlit-friendly)
 # ============================================================
 
-def get_query_chain(domain_code: str):
-    return RunnableLambda(lambda query: answer_query(query, domain_code))
+def get_query_chain(domain_code: str, chat_history: List[tuple], conversation_summary: str):
+    return RunnableLambda(lambda query: answer_query(query, domain_code, chat_history, conversation_summary))
 
 
 # chain = get_query_chain("cond-mat")
