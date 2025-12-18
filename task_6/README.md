@@ -25,7 +25,6 @@ Python · Streamlit · LangChain · FAISS · Google Gemini · Sentence-Transform
 ## ▶️ Run the App
 
 ```bash
-pip install -r requirements.txt
 cd task_6
 streamlit run main_6.py
 ```
@@ -38,3 +37,8 @@ streamlit run main_6.py
 * "¿Cuáles son los síntomas de la leucemia?" (Spanish)
 * "ल्यूकेमिया के लक्षण क्या हैं?" (Hindi)
 * "Quels sont les traitements disponibles ?" (French)
+
+## Recorded Video
+```
+https://drive.google.com/file/d/1LqVclKG7ffGecwcDRwRGorVAJDw-KJF4/view?usp=sharing
+```
