@@ -21,35 +21,26 @@ A production-ready Python-based system that crawls any website, extracts useful 
 - All events stored in crawler.log  
 - Includes crawl attempts, failures, saved pages
 
-### ✅ Configurable Pipeline
-Settings stored in config.yaml
-
-## 🛠 Installation
-```
-pip install -r requirements.txt
-```
-
 ## 🛠 Update API key and Dataset file path
 ```
-In task_1/.env file, update the GOOGLE_API_KEY and dataset_file location.
+In .env file, update the GOOGLE_API_KEY and dataset_file location.
 ```
 
 ## ▶️ How to Run
-```
+```bash
 cd task_1
 streamlit run main_1.py
 _
 ```
 
-## 📁 Output
-Markdown files saved in:
-```
-scraped_pages/
-```
+## 🧪 Example Queries
 
-## 🎯 Final Outcome
-A fully working ingestion pipeline ready for RAG systems.
-All the website that are crawled are stored in crawler/crawler.log file.
-All the web scraping details are stored in scraped_pages folder.
-vector_db_store folder contains the embeddings of the knowledge database.
-The scheduler runs every 12 hours to updated the knowledge database.
+* "What are the courses offered by Elevance Skills"
+* "What is Elevance Skills"
+* "Provide me contact details of Elevance Skills"
+* "How to install Power BI on mac"
+
+## Recorded Video
+```
+https://drive.google.com/file/d/19t7tuuEgPO7AOCPMDSFYrLVfk1HuqBpJ/view?usp=sharing
+```
