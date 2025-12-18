@@ -67,30 +67,6 @@ medical-qa-chatbot/
 
 ## ⚙️ Installation & Setup
 
-### 1️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/your-username/medical-qa-chatbot.git
-cd medical-qa-chatbot
-```
-
-### 2️⃣ Create Virtual Environment
-
-```bash
-python -m venv venv
-source venv/bin/activate   # macOS/Linux
-venv\\Scripts\\activate    # Windows
-```
-
-### 3️⃣ Install Dependencies
-
-```bash
-pip install -r requirements.txt
-cd task_3
-```
-
----
-
 ## 📥 Dataset Preparation
 
 ### Download MedQuAD
@@ -124,6 +100,7 @@ data/medquad.csv
 ## ▶️ Run the Application
 
 ```bash
+cd task_3
 streamlit run main_3.py
 ```
 
@@ -141,3 +118,8 @@ This creates FAISS embeddings stored locally.
 * "What tests diagnose lung cancer?"
 
 ---
+
+## Recorded Video Link
+```
+https://drive.google.com/file/d/15wQnIG5mwbDLl3WkDt-PZnCgBnXjJ0YU/view?usp=sharing
+```

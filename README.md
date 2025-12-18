@@ -41,6 +41,24 @@ Python · Streamlit · LangChain · FAISS · Google Gemini · Sentence-Transform
 ```bash
 git clone https://github.com/VASIL-ANSARI/Gen-AI
 cd Gen AI Project/customer-chatbot
-pip install -r requirements.txt
 GOOGLE_API_KEY="your_api_key_here"
+```
+
+### Create Virtual Environment
+
+```bash
+python -m venv venv
+source venv/bin/activate   # macOS/Linux
+venv\\Scripts\\activate    # Windows
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+## Recordings Folder
+```
+https://drive.google.com/drive/folders/1p50PjiIfCXb9nVHbVFZ_hgAGUN0dbgXo?usp=sharing
 ```
