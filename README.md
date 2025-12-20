@@ -44,6 +44,8 @@ cd Gen AI Project/customer-chatbot
 GOOGLE_API_KEY="your_api_key_here"
 ```
 
+* Note: Ensure to update the .env properties in every folder before running the application
+
 ### Create Virtual Environment
 
 ```bash

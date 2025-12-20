@@ -32,7 +32,8 @@ The application combines:
 
 * Accepts **text queries**
 * Accepts **image uploads (JPG, PNG, JPEG)**
-* Gemini processes image + prompt together
+* Gemini processes image + prompt tog
+ether
 * Useful for chart explanations, visual interpretation, and UI screenshots
 
 ### 4. On-Demand Knowledge Ingestion
@@ -70,45 +71,10 @@ Streamlit UI
 
 ---
 
-## 🔐 Environment Setup
-
-### 1. Clone the Repository
-
-```bash
-git clone <your-repo-url>
-cd <project-folder>
-```
-
-### 2. Create Virtual Environment (Recommended)
-
-```bash
-python -m venv venv
-source venv/bin/activate        # macOS / Linux
-venv\Scripts\activate           # Windows
-```
-
-### 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Configure Environment Variables
-
-```bash
-cd task_2
-```
-
-```env
-GOOGLE_API_KEY=your_gemini_api_key_here
-dataset_file=your dataset file lcoation
-```
-
----
-
 ## ▶️ How to Run the Application
 
 ```bash
+cd task_2
 streamlit run main_2.py
 ```
 
@@ -160,3 +126,14 @@ I don't know.
 | Config           | python-dotenv          |
 
 ---
+
+
+## Example Queries
+* What is the difference between them. (Attach img3)
+* How can I use PowerBI on my Mac system?
+* What is the issue in this SQL query? (Attach img2)
+
+## Recorded Video
+```
+https://drive.google.com/file/d/1BLk1hIhZRfT_WtVYGBACKe4w_UT9Bwvq/view?usp=sharing
+```
