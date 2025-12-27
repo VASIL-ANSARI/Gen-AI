@@ -9,6 +9,7 @@ from langchain_community.embeddings import HuggingFaceInstructEmbeddings
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnableMap, RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
+from ner import extract_medical_entities
 import os
 import traceback
 
@@ -110,3 +111,20 @@ def build_rag_chain(retriever):
     )
 
     return rag_chain
+
+"""
+Complete wrapper with RAG pipeline & NER extraction.
+"""
+def answer_with_entities(question: str):
+    
+    rag = retrieve_context()
+    response = rag.invoke(question)
+
+    query_entities = extract_medical_entities(question)
+    answer_entities = extract_medical_entities(response)
+
+    return {
+        "answer": response,
+        "query_entities": query_entities,
+        "answer_entities": answer_entities
+    }
